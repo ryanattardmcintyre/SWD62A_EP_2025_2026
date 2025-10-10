@@ -1,0 +1,30 @@
+﻿@model Presentation.Models.Message
+
+@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+<h1>This is a Test page</h1>
+<hr />
+
+<br />
+<br />
+
+<h2>@Model.Text</h2>
+<h3>by @Model.Author</h3>
+
+<hr />
+
+<form action="/Test/SubmitMessage" method="post">
+
+    <table>
+        <tr>
+            <td>Message:</td><td><textarea rows="3" name="text"></textarea></td>
+        </tr>
+        <tr>
+            <td>Author:</td>
+            <td><input type="text" name="Author" /></td>
+        </tr>
+    </table>
+
+    <input type="submit" value="Submit" />
+</form>
