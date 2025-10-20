@@ -1,0 +1,38 @@
+﻿@{
+    var success = TempData["success"] as string;
+    var error = TempData["failure"] as string;
+    var info = TempData["info"] as string;
+
+    var message = success ?? error ?? info;
+    var type = success != null ? "success" : error != null ? "danger" : info != null ? "info" : null;
+    var title = success != null ? "Success" : error != null ? "Error" : info != null ? "Notice" : null;
+}
+
+@if (!string.IsNullOrEmpty(message) && type != null)
+{
+    <div class="modal fade" id="feedbackModal" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header bg-@type text-white">
+                    <h5 class="modal-title">@title</h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    @message
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-outline-@type" data-bs-dismiss="modal">OK</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            var el = document.getElementById('feedbackModal');
+            if (el && typeof bootstrap !== 'undefined') {
+                new bootstrap.Modal(el).show();
+            }
+        });
+    </script>
+}
