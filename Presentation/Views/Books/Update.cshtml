@@ -1,16 +1,18 @@
 ﻿@model Presentation.Models.BooksCreateViewModel
 @{
-    ViewData["Title"] = "Create Book";
+    ViewData["Title"] = "Update Book";
 }
 
 <div class="container mt-4">
     <div class="card shadow-sm">
         <div class="card-header">
-            <h5 class="mb-0">Create Book</h5>
+            <h5 class="mb-0">Update Book</h5>
         </div>
         <div class="card-body">
-            <form action="/Books/Create" method="post">
+            <form action="/Books/Update" method="post">
                 @Html.AntiForgeryToken()
+
+                <input type="hidden" value="@Model.Book.Id" name="Book.Id"/>
 
                 <div class="mb-3">
                     <label class="form-label">Title</label>
@@ -32,10 +34,18 @@
 
                 <div class="mb-3">
                     <label asp-for="Book.CategoryFK" class="form-label">Category</label>
-                    <select name="Book.CategoryFK"  class="form-control">
-                        @foreach(var c in Model.Categories)
+                    <select name="Book.CategoryFK" class="form-control">
+                        @foreach (var c in Model.Categories)
                         {
-                            <option value="@c.Id">@c.Name</option>
+                            if(c.Id == Model.Book.CategoryFK)
+                            {
+                                <option value="@c.Id" selected>@c.Name</option>
+                            }
+                            else
+                            {
+                                <option value="@c.Id">@c.Name</option>
+                            }
+
                         }
                     </select>
                     <span asp-validation-for="Book.CategoryFK" class="text-danger"></span>

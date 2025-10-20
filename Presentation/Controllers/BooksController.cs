@@ -1,6 +1,7 @@
 ﻿using DataAccess.Repositories;
 using Domain.Models;
 using Microsoft.AspNetCore.Mvc;
+using Presentation.Models;
 
 namespace Presentation.Controllers
 {
@@ -34,24 +35,24 @@ namespace Presentation.Controllers
         }
 
         [HttpGet] //Loads the page (with empty input controls)
-        public IActionResult Create()
+        public IActionResult Create([FromServices] CategoriesRepository categoriesRepository)
         {
-            return View();
+            BooksCreateViewModel myModel = new BooksCreateViewModel(categoriesRepository);
+            return View(myModel);
         }
 
         [HttpPost] //Handles the submission form
 
-        public IActionResult Create(Book b)
+        public IActionResult Create(BooksCreateViewModel b)
         {
             //TempData survives a redirection
-
             try
             {
-                _booksRepository.Add(b);
+                _booksRepository.Add(b.Book);
                 TempData["success"] = "Book added successfully";
                 ModelState.Clear();
-              //  ViewBag.success = "Book added successfully"; //this doesn't survive a redirection
-                return View();
+
+                return RedirectToAction("Create"); //to redirect the user to the GET create method
             }
             catch (Exception ex)
             {
@@ -59,14 +60,39 @@ namespace Presentation.Controllers
                 return View(b);
             }
         }
-       /* public IActionResult Delete(int id)
-        {
-        
-        }
-        public IActionResult Details(int id)
-        {
-           
 
-        }*/
+        [HttpGet]
+        public IActionResult Update(int id, [FromServices] CategoriesRepository categoriesRepository)
+        {
+            var originalBook = _booksRepository.Get(id);
+
+            BooksCreateViewModel myModel = new BooksCreateViewModel(categoriesRepository);
+
+            myModel.Book = originalBook; //we need to show existent details of the current book
+            return View(myModel);
+        }
+        [HttpPost]
+        public IActionResult Update(BooksCreateViewModel b)
+        {
+            try
+            {
+                _booksRepository.Update(b.Book);
+                TempData["success"] = "Book updated successfully";
+                ModelState.Clear();
+
+                var myparams = new { id = b.Book.Id };
+
+                return RedirectToAction("Update", myparams); //to redirect the user to the GET create method
+            }
+            catch (Exception ex)
+            {
+                TempData["failure"] = "Book failed to be updated. Try again later";
+                return View(b);
+            }
+
+        }
+
+
+        
     }
 }

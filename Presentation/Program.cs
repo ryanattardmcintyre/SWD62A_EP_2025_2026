@@ -38,6 +38,7 @@ builder.Services.AddControllersWithViews();
 //3) Singleton - creates one instance for everyone
 
 builder.Services.AddScoped(typeof(BooksRepository));
+builder.Services.AddScoped(typeof(CategoriesRepository));
 
 
 var app = builder.Build();
