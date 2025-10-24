@@ -1,0 +1,251 @@
+﻿@model IEnumerable<Domain.Models.Book>
+
+@{
+    string Monogram(string? s)
+        => string.IsNullOrWhiteSpace(s) ? "?" : (s.Trim()[0].ToString().ToUpper());
+
+    var q = (string?)ViewBag.Q ?? "";
+    var count = (int)(ViewBag.ResultCount ?? Model.Count());
+
+    var page = (int)(ViewBag.Page ?? 1);
+    var pageSize = (int)(ViewBag.PageSize ?? 12);
+    var totalPages = (int)(ViewBag.TotalPages ?? 1);
+    var firstItem = (int)(ViewBag.FirstItem ?? 0);
+    var lastItem = (int)(ViewBag.LastItem ?? 0);
+}
+
+<style>
+    .catalog-wrap {
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 1rem;
+    }
+
+    .toolbar {
+        display: grid;
+        grid-template-columns: 1fr auto;
+        gap: .5rem;
+        align-items: center;
+        margin-bottom: 1rem;
+    }
+
+    .searchbox {
+        display: flex;
+        gap: .5rem;
+        width: 100%;
+    }
+
+        .searchbox input[type="text"] {
+            flex: 1;
+            padding: .55rem .7rem;
+            border: 1px solid #d1d5db;
+            border-radius: .5rem;
+            font-size: .95rem;
+        }
+
+    .btn {
+        padding: .55rem .8rem;
+        border-radius: .5rem;
+        border: 1px solid #d1d5db;
+        background: #111827;
+        color: #fff;
+        cursor: pointer;
+        text-decoration: none;
+    }
+
+        .btn.secondary {
+            background: #fff;
+            color: #111827;
+        }
+
+    .cards {
+        display: grid;
+        grid-template-columns: repeat( auto-fill, minmax(240px, 1fr) );
+        gap: 1rem;
+    }
+
+    .card {
+        border: 1px solid #e5e7eb;
+        border-radius: .75rem;
+        background: #fff;
+        padding: 1rem;
+        box-shadow: 0 1px 3px rgba(0,0,0,.05);
+        display: flex;
+        flex-direction: column;
+        gap: .6rem;
+        min-height: 180px;
+    }
+
+    .row {
+        display: flex;
+        gap: .75rem;
+        align-items: center;
+    }
+
+    .cover {
+        width: 48px;
+        height: 48px;
+        border-radius: 9999px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background: #1e40af;
+        color: #fff;
+        font-weight: 700;
+        font-size: 1.1rem;
+    }
+
+    .title {
+        font-size: 1.05rem;
+        font-weight: 600;
+        margin: 0;
+        color: #111827;
+    }
+
+    .meta {
+        font-size: .9rem;
+        color: #374151;
+    }
+
+    .pill {
+        display: inline-block;
+        padding: .2rem .5rem;
+        font-size: .75rem;
+        border-radius: 9999px;
+        border: 1px solid #e5e7eb;
+        background: #f9fafb;
+        color: #374151;
+    }
+
+        .pill.bad {
+            background: #fef2f2;
+            color: #991b1b;
+            border-color: #fecaca;
+        }
+
+    .price {
+        font-weight: 600;
+    }
+
+    .actions {
+        margin-top: auto;
+        display: flex;
+        gap: .5rem;
+    }
+    /* pager */
+    .pager {
+        display: flex;
+        gap: .4rem;
+        justify-content: center;
+        flex-wrap: wrap;
+        margin: 1rem 0;
+    }
+
+        .pager a, .pager span {
+            padding: .45rem .7rem;
+            border: 1px solid #d1d5db;
+            border-radius: .5rem;
+            text-decoration: none;
+        }
+
+        .pager .active {
+            background: #111827;
+            color: #fff;
+            border-color: #111827;
+        }
+
+        .pager .disabled {
+            opacity: .5;
+            pointer-events: none;
+        }
+
+    .results-hint {
+        text-align: center;
+        color: #6b7280;
+        font-size: .9rem;
+        margin-top: .25rem;
+    }
+</style>
+
+<div class="catalog-wrap">
+    <div class="toolbar">
+        <form method="get" action="@Url.Action("Index","Books")" class="searchbox" role="search" aria-label="Search books">
+            <input type="text" name="q" placeholder="Search by title, category, or year…" value="@q" />
+            <button type="submit" class="btn">Search</button>
+            @if (!string.IsNullOrWhiteSpace(q))
+            {
+                <a class="btn secondary" href="@Url.Action("Index", "Books")">Clear</a>
+            }
+        </form>
+        <div style="font-size:.9rem; color:#374151;">
+            @count result@(count == 1 ? "" : "s") @if (!string.IsNullOrWhiteSpace(q)) {
+            <text> for “@q”</text>
+                        ; }
+        </div>
+    </div>
+
+    <div class="cards">
+        @foreach (var b in Model)
+        {
+            var title = string.IsNullOrWhiteSpace(b.Title) ? "(Untitled)" : b.Title;
+            var categoryName = b.Category?.Name ?? "Uncategorized";
+            var stockClass = b.Stock <= 0 ? "pill bad" : "pill";
+
+            <article class="card">
+                <div class="row">
+                    <div class="cover">@Monogram(title)</div>
+                    <div>
+                        <h3 class="title">@title</h3>
+                        <div class="meta">
+                            <span>@categoryName</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row" style="margin-top:.3rem;">
+                    <span class="pill price">€ @b.Price.ToString("0.00")</span>
+                    <span class="@stockClass">@((b.Stock <= 0) ? "Out of stock" : $"Stock: {b.Stock}")</span>
+                </div>
+
+                <div class="actions">
+                    <a class="btn" href="@Url.Action("Details", "Books", new { id = b.Id })">Details</a>
+                    <a class="btn secondary" href="/Books/Update/@b.Id">Edit</a>
+                </div>
+            </article>
+        }
+    </div>
+
+    @if (!Model.Any())
+    {
+        <p style="margin-top:1rem; color:#6b7280;">No books found.</p>
+    }
+
+    @if (totalPages > 1)
+    {
+        <nav class="pager" aria-label="Pagination">
+            <a class="btn secondary @(page == 1 ? "disabled" : null)"
+               href="@Url.Action("Index", "Books", new { page = page - 1, pageSize, q })"
+               aria-label="Previous page">Prev</a>
+
+            @for (var i = 1; i <= totalPages; i++)
+            {
+                if (i == page)
+                {
+                    <span class="active" aria-current="page">@i</span>
+                }
+                else
+                {
+                    <a href="@Url.Action("Index", "Books", new { page = i, pageSize, q })">@i</a>
+                }
+            }
+
+            <a class="btn secondary @(page == totalPages ? "disabled" : null)"
+               href="@Url.Action("Index", "Books", new { page = page + 1, pageSize, q })"
+               aria-label="Next page">Next</a>
+        </nav>
+
+        <div class="results-hint">
+            Showing @firstItem–@lastItem of @count
+        </div>
+    }
+</div>

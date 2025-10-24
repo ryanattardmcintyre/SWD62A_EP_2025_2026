@@ -93,6 +93,40 @@ namespace Presentation.Controllers
         }
 
 
-        
+        public IActionResult Index(string? q, int page = 1, int pageSize = 12)
+        {
+            if (page < 1) page = 1;
+            if (pageSize < 1 || pageSize > 100) pageSize = 12;
+
+            IQueryable<Book> query = string.IsNullOrWhiteSpace(q)
+                ? _booksRepository.Get()
+                : _booksRepository.Get(q);
+
+            var total = query.Count();
+
+            // stable order for consistent paging
+            query = query.OrderBy(b => b.Title).ThenBy(b => b.Id);
+
+            var items = query
+                .Skip((page - 1) * pageSize)
+                .Take(pageSize)
+                .ToList();
+
+            var totalPages = (int)Math.Ceiling(total / (double)pageSize);
+
+            ViewBag.Q = q;
+            ViewBag.ResultCount = total;
+            ViewBag.Page = page;
+            ViewBag.PageSize = pageSize;
+            ViewBag.TotalPages = totalPages;
+            ViewBag.FirstItem = total == 0 ? 0 : ((page - 1) * pageSize) + 1;
+            ViewBag.LastItem = Math.Min(page * pageSize, total);
+
+            return View(items);
+        }
+
+
+
+
     }
 }
