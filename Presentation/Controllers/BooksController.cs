@@ -1,6 +1,7 @@
 ﻿using DataAccess.Repositories;
 using Domain.Models;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Hosting;
 using Presentation.Models;
 
 namespace Presentation.Controllers
@@ -42,12 +43,26 @@ namespace Presentation.Controllers
         }
 
         [HttpPost] //Handles the submission form
-
-        public IActionResult Create(BooksCreateViewModel b)
+        //Framework service IWebHostEnvironment
+        //Application service BooksRepository, CategoriesRepository, ShoppingCartDbContext
+        public IActionResult Create(BooksCreateViewModel b, [FromServices]IWebHostEnvironment host)
         {
             //TempData survives a redirection
             try
             {
+                //cleaning the data related to the uploaded file
+                //i.e. a) to give a filename to the file b) where to store the file?
+                string filename = Guid.NewGuid().ToString() + System.IO.Path.GetExtension(b.UploadedFile.FileName);
+
+                //absolute path //C:\Users\attar\source\repos\SWD62A_EP_2025_2026\Presentation\wwwroot\images
+                string absolutePath = host.WebRootPath + @"\images\" + filename;
+
+                using (var myStream = new System.IO.FileStream(absolutePath, FileMode.CreateNew))
+                {
+                    b.UploadedFile.CopyTo(myStream);
+                }
+
+                b.Book.Path = "\\images\\" + filename; //relative path
                 _booksRepository.Add(b.Book);
                 TempData["success"] = "Book added successfully";
                 ModelState.Clear();
@@ -72,10 +87,34 @@ namespace Presentation.Controllers
             return View(myModel);
         }
         [HttpPost]
-        public IActionResult Update(BooksCreateViewModel b)
+        public IActionResult Update(BooksCreateViewModel b, [FromServices] IWebHostEnvironment host)
         {
             try
             {
+                var originalBook = _booksRepository.Get(b.Book.Id);
+
+                if (b.UploadedFile != null)
+                {
+                    //Uploading
+                    string filename = Guid.NewGuid().ToString() + System.IO.Path.GetExtension(b.UploadedFile.FileName);
+
+                    //absolute path //C:\Users\attar\source\repos\SWD62A_EP_2025_2026\Presentation\wwwroot\images
+                    string absolutePath = host.WebRootPath + @"\images\" + filename;
+
+                    using (var myStream = new System.IO.FileStream(absolutePath, FileMode.CreateNew))
+                    {
+                        b.UploadedFile.CopyTo(myStream);
+                    }
+
+                    b.Book.Path = "\\images\\" + filename; //relative path
+
+                    //Deleting the unused image
+                    if(System.IO.File.Exists(host.WebRootPath+originalBook.Path))
+                    {
+                        System.IO.File.Delete(host.WebRootPath + originalBook.Path);
+                    }
+                }
+
                 _booksRepository.Update(b.Book);
                 TempData["success"] = "Book updated successfully";
                 ModelState.Clear();

@@ -18,6 +18,9 @@ namespace Presentation.Models
         public List<Category> Categories { get; set; }
         public Book Book { get; set; }
 
+        //FormFile is the data type used by asp.net core 6 onwards to store the uploaded file
+        public IFormFile UploadedFile { get; set; }
+
 //        public string Message { get; set; } 
     }
 }

@@ -27,5 +27,7 @@ namespace Domain.Models
         [ForeignKey("CategoryFK")]
         public virtual Category Category { get; set; } //navigational property 
 
+        public string Path { get; set; }
+
     }
 }
