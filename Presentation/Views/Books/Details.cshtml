@@ -1,0 +1,110 @@
+﻿@model Domain.Models.Book
+@using System
+
+@{
+    ViewData["Title"] = Model?.Title ?? "Book Details";
+
+    // Resolve image path (supports absolute URLs, ~/ paths, / paths, or plain relative like "uploads/cover.jpg")
+    string imageUrl = Model.Path; //    /images/myimage.jpg
+}
+
+<style>
+    /* Full-bleed hero image even if layout uses a fixed-width .container */
+    .book-hero {
+      position: relative;
+      left: 50%;
+      right: 50%;
+      margin-left: -50vw;
+      margin-right: -50vw;
+      width: 100vw;
+      overflow: hidden;
+    }
+    .book-hero img {
+      width: 100%;
+      height: clamp(240px, 40vh, 520px); /* Tweak to taste */
+      object-fit: cover;                  /* Crop nicely without distortion */
+      display: block;
+    }
+
+    /* Content area */
+    .book-details {
+      max-width: 1100px;
+      margin: 1.25rem auto;
+      padding: 0 1rem;
+    }
+    .meta-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: .75rem 1rem;
+    }
+    .meta-item {
+      padding: .75rem 1rem;
+      border: 1px solid #e6e6e6;
+      border-radius: .5rem;
+      background: #fff;
+    }
+    .meta-item .label {
+      display: block;
+      font-size: .85rem;
+      color: #666;
+      margin-bottom: .25rem;
+    }
+    .page-actions {
+      margin-top: 1rem;
+      display: flex;
+      gap: .5rem;
+      flex-wrap: wrap;
+    }
+    .btn-linklike {
+      padding: .55rem .9rem;
+      border-radius: .5rem;
+      border: 1px solid #e6e6e6;
+      background: #fafafa;
+      text-decoration: none;
+      color: #222;
+    }
+    .btn-linklike:hover {
+      background: #f0f0f0;
+    }
+</style>
+
+<!-- Full-width hero image -->
+<section class="book-hero">
+    @if (String.IsNullOrEmpty(Model.Path))
+    {
+        <img src="/images/defaultBookImage.jpg" alt="@Model?.Title" />
+    }
+    else
+    {
+        <img src="@Model.Path" alt="@Model?.Title" />
+    }
+</section>
+
+<!-- Main content -->
+<div class="book-details">
+    <h1 class="mb-2">@Model?.Title</h1>
+
+    <div class="meta-grid">
+        <div class="meta-item">
+            <span class="label">Price</span>
+            <strong>@Model?.Price.ToString("0.00")</strong>
+        </div>
+        <div class="meta-item">
+            <span class="label">Stock</span>
+            <strong>@Model?.Stock</strong>
+        </div>
+        <div class="meta-item">
+            <span class="label">Category</span>
+            <strong>@Model?.Category.Name</strong>
+        </div>
+        <div class="meta-item">
+            <span class="label">ID</span>
+            <strong>@Model?.Id</strong>
+        </div>
+    </div>
+
+    <div class="page-actions">
+        <a asp-action="Index" class="btn-linklike">← Back to list</a>
+        <a asp-action="Update" asp-route-id="@Model?.Id" class="btn-linklike">Edit</a>
+    </div>
+</div>

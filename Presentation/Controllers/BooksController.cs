@@ -165,7 +165,30 @@ namespace Presentation.Controllers
         }
 
 
+        public IActionResult Details (int id)
+        {
+            var book = _booksRepository.Get(id);
+            if (book == null) {
+                TempData["failure"] = "Book id not found";
+                return RedirectToAction("Index");
+                    }
+
+            return View(book);
+        }
 
 
+        //parameter:
+        //if you're targeting a single item then int id would do
+        //if you're targeting a number of items then an array of the same type have to be used e.g. int[] ids
+
+        [HttpPost]
+        public IActionResult Delete(int[] ids)
+        {
+            foreach (var id in ids) {
+                _booksRepository.Delete(id);
+                    }
+            TempData["success"] = "Books deleted";
+            return RedirectToAction("Index");
+        }
     }
 }

@@ -188,7 +188,14 @@
         </div>
     </div>
 
-    <div class="cards">
+    <form method="post" action="/Books/Delete">
+        <input type="submit" class="btn btn-danger" value="Delete" style="margin-bottom:5px;" 
+          onclick="return window.confirm('Are you sure you want to delete these permanently?')"
+        /> 
+        
+        <br />
+
+        <div class="cards">
         @foreach (var b in Model)
         {
             var title = string.IsNullOrWhiteSpace(b.Title) ? "(Untitled)" : b.Title;
@@ -216,6 +223,7 @@
                     }
 
                     <div>
+                        <input type="checkbox" name="ids" value="@b.Id" />
                         <h3 class="title">@title</h3>
                         <div class="meta">
                             <span>@categoryName</span>
@@ -236,6 +244,8 @@
             </article>
         }
     </div>
+    </form>
+
 
     @if (!Model.Any())
     {
