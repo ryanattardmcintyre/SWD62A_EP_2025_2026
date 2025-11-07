@@ -1,5 +1,7 @@
 using DataAccess.Context;
 using DataAccess.Repositories;
+using DataAccess.Services;
+using Domain.Interfaces;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Presentation.Controllers;
@@ -39,10 +41,15 @@ builder.Services.AddControllersWithViews();
 
 builder.Services.AddScoped(typeof(BooksRepository));
 builder.Services.AddScoped(typeof(CategoriesRepository));
+builder.Services.AddScoped(typeof(OrdersRepository));
 
+//we need to switch between NoPromotion vs BlackFridayPromotion depening on a property in appsettings.json
+
+builder.Services.AddScoped<IPromotion, BlackFridayPromotion>( 
+    options => new BlackFridayPromotion( options.GetRequiredService<BooksRepository>(), .5));
 
 var app = builder.Build();
-
+ 
 
 
 // Configure the HTTP request pipeline.
