@@ -1,8 +1,10 @@
 ﻿using DataAccess.Repositories;
+using Domain.Interfaces;
 using Domain.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Hosting;
 using Presentation.Models;
+using System.Web;
 
 namespace Presentation.Controllers
 {
@@ -31,8 +33,13 @@ namespace Presentation.Controllers
     public class BooksController : Controller
     {
         private BooksRepository _booksRepository;
-        public BooksController(BooksRepository booksRepository) {
+        private OrdersRepository _ordersRepository;
+        private IPromotion _promotion;
+        public BooksController(BooksRepository booksRepository, OrdersRepository ordersRepository,
+            IPromotion promotion) {
              _booksRepository = booksRepository;
+            _ordersRepository = ordersRepository;
+            _promotion = promotion;
         }
 
         [HttpGet] //Loads the page (with empty input controls)
@@ -181,13 +188,56 @@ namespace Presentation.Controllers
         //if you're targeting a single item then int id would do
         //if you're targeting a number of items then an array of the same type have to be used e.g. int[] ids
 
-        [HttpPost]
-        public IActionResult Delete(int[] ids)
+        
+        private IActionResult Delete(int[] ids)
         {
             foreach (var id in ids) {
                 _booksRepository.Delete(id);
                     }
             TempData["success"] = "Books deleted";
+            return RedirectToAction("Index");
+        }
+
+        private IActionResult Buy(List<OrderItem> booksBeingBought)
+        {
+            _ordersRepository.Checkout("", booksBeingBought, _booksRepository);
+            double resultingTotal = _promotion.ApplyPromotion(booksBeingBought);
+            
+            //process payment with the resulting total
+
+            TempData["success"] = "Total : " + resultingTotal
+                + " was charged to your visa/mastercard. Books order placed!";
+
+            return RedirectToAction("Index", "Books");
+        }
+
+        public IActionResult Execute(string todo, int[] ids, int[] quantities , int[] allIds)
+        {
+            if(todo.ToLower() == "checkout")
+            {
+                List<OrderItem> items = new List<OrderItem>();
+                for (int i = 0; i < ids.Length; i++)
+                {
+                    var indexOfEvaluatedBookId = allIds.ToList().IndexOf(ids[i]);
+                    int qtyOfEvaluatedBookid = quantities[indexOfEvaluatedBookId];
+                    if (qtyOfEvaluatedBookid > 0)
+                    {
+                        items.Add(new OrderItem()
+                        {
+                            BookFK = ids[i],
+                            Qty = qtyOfEvaluatedBookid
+                        });
+                    }
+                }
+
+                return Buy(items);
+            }
+            else if(todo.ToLower() == "delete")
+            {
+                return Delete(ids);
+
+            }
+
             return RedirectToAction("Index");
         }
     }

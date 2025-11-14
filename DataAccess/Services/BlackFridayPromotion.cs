@@ -26,7 +26,7 @@ namespace DataAccess.Services
             foreach (var item in itemsBeingBought)
             {
                 var originalBook = _booksRepository.Get(item.Id);
-                total += originalBook.Price;
+                total += (originalBook.Price * item.Qty);
             }
 
             total *= DiscountPercentage; //applying a discount of a value passed in the constructor

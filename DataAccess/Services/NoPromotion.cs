@@ -21,7 +21,7 @@ namespace DataAccess.Services
             foreach(var item in itemsBeingBought)
             {
                 var originalBook = _booksRepository.Get(item.Id);
-                total += originalBook.Price;
+                total += (originalBook.Price * item.Qty);
             }
 
             total *= 1.18;
