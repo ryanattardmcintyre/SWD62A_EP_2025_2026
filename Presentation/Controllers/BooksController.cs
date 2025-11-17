@@ -52,7 +52,7 @@ namespace Presentation.Controllers
         [HttpPost] //Handles the submission form
         //Framework service IWebHostEnvironment
         //Application service BooksRepository, CategoriesRepository, ShoppingCartDbContext
-        public IActionResult Create(BooksCreateViewModel b, [FromServices]IWebHostEnvironment host)
+        public IActionResult Create(BooksCreateViewModel b, [FromServices]IWebHostEnvironment host, [FromServices] CategoriesRepository categoriesRepository)
         {
             //TempData survives a redirection
             try
@@ -79,9 +79,10 @@ namespace Presentation.Controllers
             catch (Exception ex)
             {
                 TempData["failure"] = "Book failed to be added. Try again later";
-                return RedirectToAction("Create");
+                //return RedirectToAction("Create");
                 //retrieve the categories list and pass it to the page
-               // return View(b); //it will try to open the Create view without passing the categories
+                BooksCreateViewModel myModel = new BooksCreateViewModel(categoriesRepository);
+                return View(myModel);
             }
         }
 
