@@ -79,7 +79,9 @@ namespace Presentation.Controllers
             catch (Exception ex)
             {
                 TempData["failure"] = "Book failed to be added. Try again later";
-                return View(b);
+                return RedirectToAction("Create");
+                //retrieve the categories list and pass it to the page
+               // return View(b); //it will try to open the Create view without passing the categories
             }
         }
 

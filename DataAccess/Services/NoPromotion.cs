@@ -20,7 +20,7 @@ namespace DataAccess.Services
             double total = 0;
             foreach(var item in itemsBeingBought)
             {
-                var originalBook = _booksRepository.Get(item.Id);
+                var originalBook = _booksRepository.Get(item.BookFK);
                 total += (originalBook.Price * item.Qty);
             }
 
