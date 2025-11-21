@@ -2,6 +2,7 @@ using DataAccess.Context;
 using DataAccess.Repositories;
 using DataAccess.Services;
 using Domain.Interfaces;
+using Domain.Models;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Presentation.Controllers;
@@ -15,7 +16,7 @@ builder.Services.AddDbContext<ShoppingCartDbContext>(options =>
     options.UseSqlServer(connectionString));
 builder.Services.AddDatabaseDeveloperPageExceptionFilter();
 
-builder.Services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = true)
+builder.Services.AddDefaultIdentity<CustomUser>(options => options.SignIn.RequireConfirmedAccount = true)
     .AddEntityFrameworkStores<ShoppingCartDbContext>();
 builder.Services.AddControllersWithViews();
 

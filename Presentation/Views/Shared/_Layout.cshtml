@@ -29,6 +29,20 @@
                         <li class="nav-item">
                             <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
                         </li>
+
+                        @if (User.Identity.IsAuthenticated == true)
+                        {
+                            if (User.Identity.Name == "ryan.attard@mcast.edu.mt")
+                            {
+                                <li class="nav-item">
+                                    <a class="nav-link text-dark" href="/BulkImport/Approve?type=restaurant">Approve Restaurants</a>
+                                </li>
+                            }
+                        }
+                        <li class="nav-item">
+                            <a class="nav-link text-dark" asp-area="" asp-controller="BulkImport" asp-action="Catalogue">Restaurant Catalogue</a>
+                        </li>
+
                     </ul>
                     <partial name="_LoginPartial" />
                 </div>
