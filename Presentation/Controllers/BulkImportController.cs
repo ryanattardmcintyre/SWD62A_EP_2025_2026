@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using DataAccess.Services;
+using Microsoft.AspNetCore.Mvc;
 using Presentation.Factory;
 using System.IO.Compression;
 
@@ -6,6 +7,15 @@ namespace Presentation.Controllers
 {
     public class BulkImportController : Controller
     {
+
+        public IActionResult Commit([FromKeyedServices("nopromotion")] NoPromotion noPromotion,
+            [FromKeyedServices("blackfridaypromotion")] BlackFridayPromotion blackFridayPromotion)
+        {
+            noPromotion.ApplyPromotion();
+            blackFridayPromotion.ApplyPromotion();
+        }
+
+
         /*  public IActionResult Approve(string type, int restaurant)
           {
               List<IItemValidating> items = new List<IItemValidating>();

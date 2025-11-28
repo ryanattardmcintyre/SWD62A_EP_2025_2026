@@ -1,4 +1,7 @@
-﻿<!DOCTYPE html>
+﻿@inject IConfiguration _config;
+
+
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="utf-8" />
@@ -29,19 +32,26 @@
                         <li class="nav-item">
                             <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
                         </li>
-
-                        @if (User.Identity.IsAuthenticated == true)
-                        {
-                            if (User.Identity.Name == "ryan.attard@mcast.edu.mt")
-                            {
-                                <li class="nav-item">
-                                    <a class="nav-link text-dark" href="/BulkImport/Approve?type=restaurant">Approve Restaurants</a>
-                                </li>
-                            }
-                        }
                         <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="BulkImport" asp-action="Catalogue">Restaurant Catalogue</a>
+                            <a class="nav-link text-dark" asp-area="" asp-controller="Books" asp-action="Index">Catalogue</a>
                         </li>
+
+
+                        @{
+                            string admin = _config.GetValue<string>("admin");
+                        }
+
+                        @if (User != null  && User.Identity != null && User.Identity.IsAuthenticated)
+                        {
+                                if ( User.Identity.Name.ToLower() == admin.ToLower())
+                                {
+                                    <li class="nav-item">
+                                        <a class="nav-link text-dark" asp-area="" asp-controller="Books" asp-action="Create">Add Book</a>
+                                        @* <a class="" href="/BulkImport/Approve">Approve</a> *@
+                                    </li>
+                                }
+                        }
+
 
                     </ul>
                     <partial name="_LoginPartial" />

@@ -5,6 +5,7 @@ using Domain.Interfaces;
 using Domain.Models;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.DependencyInjection;
 using Presentation.Controllers;
 using Presentation.Data;
 
@@ -48,6 +49,11 @@ builder.Services.AddScoped(typeof(OrdersRepository));
 
 builder.Services.AddScoped<IPromotion, BlackFridayPromotion>( 
     options => new BlackFridayPromotion( options.GetRequiredService<BooksRepository>(), .5));
+
+
+var booksRepository =builder.Services.BuildServiceProvider().CreateScope().ServiceProvider.GetRequiredService<BooksRepository>();
+
+
 
 var app = builder.Build();
  
