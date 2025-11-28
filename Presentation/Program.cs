@@ -41,7 +41,7 @@ builder.Services.AddControllersWithViews();
 //2) Transient - creates one instance per call per user
 //3) Singleton - creates one instance for everyone
 
-builder.Services.AddScoped(typeof(BooksRepository));
+//builder.Services.AddScoped(typeof(BooksRepository));
 builder.Services.AddScoped(typeof(CategoriesRepository));
 builder.Services.AddScoped(typeof(OrdersRepository));
 
@@ -51,7 +51,15 @@ builder.Services.AddScoped<IPromotion, BlackFridayPromotion>(
     options => new BlackFridayPromotion( options.GetRequiredService<BooksRepository>(), .5));
 
 
-var booksRepository =builder.Services.BuildServiceProvider().CreateScope().ServiceProvider.GetRequiredService<BooksRepository>();
+
+builder.Services.AddKeyedScoped<IBooksRepository, BooksRepository>("db");
+
+string filePathForJsonData = builder.Configuration.GetValue<string>("jsonDataSource") ?? "books.json";
+builder.Services.AddKeyedScoped<IBooksRepository, BooksFileRepository>("file",
+    (sp, key) => new BooksFileRepository(filePathForJsonData));
+
+
+//var booksRepository =builder.Services.BuildServiceProvider().CreateScope().ServiceProvider.GetRequiredService<BooksRepository>();
 
 
 

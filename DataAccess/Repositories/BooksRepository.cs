@@ -1,4 +1,5 @@
 ﻿using DataAccess.Context;
+using Domain.Interfaces;
 using Domain.Models;
 using System;
 using System.Collections.Generic;
@@ -20,7 +21,7 @@ namespace DataAccess.Repositories
     //IEnumerable - it does what happens in IQueryable and it opens the connection to the database to 
     //              to execute the prepared SQL command
 
-    public class BooksRepository
+    public class BooksRepository: IBooksRepository
     {
         public ShoppingCartDbContext _context { get; set; }
         //when you have a paramter in the constructor it can be injected using DI

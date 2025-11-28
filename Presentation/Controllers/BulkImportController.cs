@@ -5,7 +5,7 @@ using System.IO.Compression;
 
 namespace Presentation.Controllers
 {
-    public class BulkImportController : Controller
+   /* public class BulkImportController : Controller
     {
 
         public IActionResult Commit([FromKeyedServices("nopromotion")] NoPromotion noPromotion,
@@ -68,7 +68,7 @@ namespace Presentation.Controllers
               //save the data together with the images uploaded into the db
               //via the ItemsDbRepository
           }
-        */
+      
 
 
         //is that when this method is called it generates a zip file
@@ -116,4 +116,5 @@ namespace Presentation.Controllers
         }
 
     }
+*/
 }

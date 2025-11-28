@@ -1,0 +1,28 @@
+{"Category":{"Id":1,"Name":"Computer Science"},"Id":13,"Title":"A Map of Forgotten Places","Price":8.99,"Stock":4,"CategoryFK":1,"Path":""}
+{"Category":{"Id":1,"Name":"Computer Science"},"Id":31,"Title":"artificial intelligence","Price":11.0,"Stock":11,"CategoryFK":1,"Path":"\\images\\a149e3fb-773b-436e-9015-97830d0276a0.jfif"}
+{"Category":{"Id":2,"Name":"Biographies"},"Id":24,"Title":"Concurrency Made Friendly","Price":27.49,"Stock":5,"CategoryFK":2,"Path":""}
+{"Category":{"Id":2,"Name":"Biographies"},"Id":20,"Title":"Designing Clean APIs","Price":31.4,"Stock":10,"CategoryFK":2,"Path":""}
+{"Category":{"Id":2,"Name":"Biographies"},"Id":28,"Title":"Docker for .NET Devs","Price":32.0,"Stock":17,"CategoryFK":2,"Path":""}
+{"Category":{"Id":1,"Name":"Computer Science"},"Id":4,"Title":"Enterprise Programming book","Price":10.0,"Stock":8,"CategoryFK":1,"Path":""}
+{"Category":{"Id":2,"Name":"Biographies"},"Id":18,"Title":"Entity Framework in Action","Price":36.0,"Stock":12,"CategoryFK":2,"Path":""}
+{"Category":{"Id":1,"Name":"Computer Science"},"Id":1,"Title":"intro to ep","Price":20.0,"Stock":99,"CategoryFK":1,"Path":""}
+{"Category":{"Id":1,"Name":"Computer Science"},"Id":3,"Title":"intro to ep","Price":20.0,"Stock":100,"CategoryFK":1,"Path":""}
+{"Category":{"Id":1,"Name":"Computer Science"},"Id":2,"Title":"kkkk","Price":10.0,"Stock":1,"CategoryFK":1,"Path":""}
+{"Category":{"Id":1,"Name":"Computer Science"},"Id":9,"Title":"Midnight in Valletta","Price":14.75,"Stock":15,"CategoryFK":1,"Path":""}
+{"Category":{"Id":2,"Name":"Biographies"},"Id":26,"Title":"Minimal APIs with .NET","Price":26.75,"Stock":8,"CategoryFK":2,"Path":""}
+{"Category":{"Id":2,"Name":"Biographies"},"Id":29,"Title":"Modern DDD in Practice","Price":35.5,"Stock":9,"CategoryFK":2,"Path":""}
+{"Category":{"Id":2,"Name":"Biographies"},"Id":17,"Title":"Patterns in Code: C# Basics","Price":29.9,"Stock":20,"CategoryFK":2,"Path":""}
+{"Category":{"Id":2,"Name":"Biographies"},"Id":23,"Title":"Practical LINQ","Price":24.99,"Stock":11,"CategoryFK":2,"Path":""}
+{"Category":{"Id":2,"Name":"Biographies"},"Id":21,"Title":"Refactoring Legacy C#","Price":28.0,"Stock":6,"CategoryFK":2,"Path":""}
+{"Category":{"Id":1,"Name":"Computer Science"},"Id":8,"Title":"Shards of Autumn","Price":9.49,"Stock":3,"CategoryFK":1,"Path":""}
+{"Category":{"Id":1,"Name":"Computer Science"},"Id":16,"Title":"Signals at Dusk","Price":7.95,"Stock":0,"CategoryFK":1,"Path":""}
+{"Category":{"Id":2,"Name":"Biographies"},"Id":19,"Title":"SQL for Busy People","Price":22.5,"Stock":18,"CategoryFK":2,"Path":""}
+{"Category":{"Id":1,"Name":"Computer Science"},"Id":12,"Title":"Stories from a Small Island","Price":10.5,"Stock":9,"CategoryFK":1,"Path":""}
+{"Category":{"Id":2,"Name":"Biographies"},"Id":5,"Title":"test3","Price":10.0,"Stock":10,"CategoryFK":2,"Path":""}
+{"Category":{"Id":2,"Name":"Biographies"},"Id":6,"Title":"test3","Price":10.0,"Stock":10,"CategoryFK":2,"Path":""}
+{"Category":{"Id":1,"Name":"Computer Science"},"Id":14,"Title":"The Blue Harbour","Price":12.25,"Stock":13,"CategoryFK":1,"Path":""}
+{"Category":{"Id":1,"Name":"Computer Science"},"Id":15,"Title":"The Cartographer’s Daughter","Price":11.75,"Stock":1,"CategoryFK":1,"Path":""}
+{"Category":{"Id":1,"Name":"Computer Science"},"Id":11,"Title":"The Last Lighthouse","Price":13.8,"Stock":0,"CategoryFK":1,"Path":""}
+{"Category":{"Id":1,"Name":"Computer Science"},"Id":7,"Title":"The Silent River","Price":12.99,"Stock":8,"CategoryFK":1,"Path":""}
+{"Category":{"Id":2,"Name":"Biographies"},"Id":25,"Title":"Unit Testing by Example","Price":21.0,"Stock":16,"CategoryFK":2,"Path":""}
+{"Category":{"Id":1,"Name":"Computer Science"},"Id":10,"Title":"Winds Over The Strait","Price":11.2,"Stock":6,"CategoryFK":1,"Path":""}
