@@ -9,14 +9,7 @@ using System.Threading.Tasks;
 
 namespace Domain.Models
 {
-    //Code first approach - what we declare here is going to be applied in the database
-
-    //Entity Framework Core - this provides us with a number advantages:
-    //                        1) we can use LINQ
-    //                        2) we can make use of LazyLoading - meaning we can view data from
-    //                           child tables/parent tables without having to code JOIN statements
-
-    public class Book: IItem
+    public class Journal: IItem
     {
         [Key, DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int Id { get; set; }
@@ -24,15 +17,18 @@ namespace Domain.Models
         public double Price { get; set; }
         public int Stock { get; set; }
         public int CategoryFK { get; set; }
-        
+
         [ForeignKey("CategoryFK")]
         public virtual Category Category { get; set; } //navigational property 
 
         public string Path { get; set; }
 
+        public int Volume { get; set; }
+        public int IssueNo { get; set; }
+
         public string GetData()
         {
-            return $"{Id} | {Title} | {Price}";
+            return $"{Id} | {Title} | {Price} | {Volume} | {IssueNo}";
         }
     }
 }

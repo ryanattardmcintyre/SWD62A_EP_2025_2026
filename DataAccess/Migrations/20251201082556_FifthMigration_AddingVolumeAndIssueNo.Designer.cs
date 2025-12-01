@@ -4,6 +4,7 @@ using DataAccess.Context;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace DataAccess.Migrations
 {
     [DbContext(typeof(ShoppingCartDbContext))]
-    partial class ShoppingCartDbContextModelSnapshot : ModelSnapshot
+    [Migration("20251201082556_FifthMigration_AddingVolumeAndIssueNo")]
+    partial class FifthMigration_AddingVolumeAndIssueNo
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -36,6 +39,9 @@ namespace DataAccess.Migrations
                     b.Property<int>("CategoryFK")
                         .HasColumnType("int");
 
+                    b.Property<int>("IssueNo")
+                        .HasColumnType("int");
+
                     b.Property<string>("Path")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -49,6 +55,9 @@ namespace DataAccess.Migrations
                     b.Property<string>("Title")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("Volume")
+                        .HasColumnType("int");
 
                     b.HasKey("Id");
 
@@ -145,44 +154,6 @@ namespace DataAccess.Migrations
                         .HasFilter("[NormalizedUserName] IS NOT NULL");
 
                     b.ToTable("AspNetUsers", (string)null);
-                });
-
-            modelBuilder.Entity("Domain.Models.Journal", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<int>("CategoryFK")
-                        .HasColumnType("int");
-
-                    b.Property<int>("IssueNo")
-                        .HasColumnType("int");
-
-                    b.Property<string>("Path")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<double>("Price")
-                        .HasColumnType("float");
-
-                    b.Property<int>("Stock")
-                        .HasColumnType("int");
-
-                    b.Property<string>("Title")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<int>("Volume")
-                        .HasColumnType("int");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("CategoryFK");
-
-                    b.ToTable("Journals");
                 });
 
             modelBuilder.Entity("Domain.Models.Order", b =>
@@ -367,17 +338,6 @@ namespace DataAccess.Migrations
                 });
 
             modelBuilder.Entity("Domain.Models.Book", b =>
-                {
-                    b.HasOne("Domain.Models.Category", "Category")
-                        .WithMany()
-                        .HasForeignKey("CategoryFK")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Category");
-                });
-
-            modelBuilder.Entity("Domain.Models.Journal", b =>
                 {
                     b.HasOne("Domain.Models.Category", "Category")
                         .WithMany()

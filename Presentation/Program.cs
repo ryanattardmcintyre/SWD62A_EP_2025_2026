@@ -8,6 +8,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Presentation.Controllers;
 using Presentation.Data;
+using Presentation.Factory;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -44,6 +45,8 @@ builder.Services.AddControllersWithViews();
 //builder.Services.AddScoped(typeof(BooksRepository));
 builder.Services.AddScoped(typeof(CategoriesRepository));
 builder.Services.AddScoped(typeof(OrdersRepository));
+builder.Services.AddScoped(typeof(JournalsRepository));
+
 
 //we need to switch between NoPromotion vs BlackFridayPromotion depening on a property in appsettings.json
 

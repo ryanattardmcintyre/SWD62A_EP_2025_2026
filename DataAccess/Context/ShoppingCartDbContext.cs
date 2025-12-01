@@ -21,6 +21,7 @@ namespace DataAccess.Context
         }
 
         public DbSet<Book> Books { get; set; } //these will be our tables
+        public DbSet<Journal> Journals { get; set; }
         public DbSet<Category> Categories { get; set; }
         public DbSet<Order> Orders { get; set; }
         public DbSet<OrderItem> OrderItems { get; set; }
