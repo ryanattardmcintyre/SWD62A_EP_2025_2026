@@ -2,6 +2,7 @@
 using Domain.Interfaces;
 using Domain.Models;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Presentation.Models;
 using System.Web;
@@ -35,9 +36,9 @@ namespace Presentation.Controllers
         private BooksRepository _booksRepository;
         private OrdersRepository _ordersRepository;
         private IPromotion _promotion;
-        public BooksController(BooksRepository booksRepository, OrdersRepository ordersRepository,
+        public BooksController([FromKeyedServices("db")] IBooksRepository booksRepository, OrdersRepository ordersRepository,
             IPromotion promotion) {
-             _booksRepository = booksRepository;
+             _booksRepository = (BooksRepository) booksRepository;
             _ordersRepository = ordersRepository;
             _promotion = promotion;
         }

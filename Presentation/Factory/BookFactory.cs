@@ -20,7 +20,7 @@ namespace Presentation.Factory
         /// depending on the type
         /// </summary>
         /// <param name="json"></param>
-        public void AddInBulkInDb(string json)
+        public void AddInBulkInDb(string json) //note: this works with a single item in the json
         {
             var item = Build(json);
             if (item.GetType() == typeof(Book))
@@ -42,6 +42,7 @@ namespace Presentation.Factory
         {
             dynamic dynamicObject = JsonConvert.DeserializeObject(json);
             IItem i;
+
             if(dynamicObject.Volume != null)
             {
                 i = JsonConvert.DeserializeObject<Journal>(json);
@@ -52,6 +53,11 @@ namespace Presentation.Factory
             }
 
             return i;
+        }
+
+        public List<IItem> BuildInBulk(string json)
+        {
+            return null;
         }
     }
 }

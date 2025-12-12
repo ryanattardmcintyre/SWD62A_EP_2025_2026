@@ -50,12 +50,12 @@ builder.Services.AddScoped(typeof(JournalsRepository));
 
 //we need to switch between NoPromotion vs BlackFridayPromotion depening on a property in appsettings.json
 
-builder.Services.AddScoped<IPromotion, BlackFridayPromotion>( 
-    options => new BlackFridayPromotion( options.GetRequiredService<BooksRepository>(), .5));
-
-
-
 builder.Services.AddKeyedScoped<IBooksRepository, BooksRepository>("db");
+
+
+builder.Services.AddScoped<IPromotion, BlackFridayPromotion>(
+    options => new BlackFridayPromotion((BooksRepository)options.GetRequiredKeyedService<IBooksRepository>("db"), .5));
+
 
 string filePathForJsonData = builder.Configuration.GetValue<string>("jsonDataSource") ?? "books.json";
 builder.Services.AddKeyedScoped<IBooksRepository, BooksFileRepository>("file",
