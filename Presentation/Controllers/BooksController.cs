@@ -1,9 +1,11 @@
 ﻿using DataAccess.Repositories;
 using Domain.Interfaces;
 using Domain.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Presentation.ActionFilter;
 using Presentation.Models;
 using System.Web;
 
@@ -31,6 +33,9 @@ namespace Presentation.Controllers
     //after you declare _testRepository as a property
      * 
      */
+
+
+    [Authorize]
     public class BooksController : Controller
     {
         private BooksRepository _booksRepository;
@@ -142,7 +147,8 @@ namespace Presentation.Controllers
 
         }
 
-
+        [ServiceFilter(typeof(QueryActionFilter))]
+        [AllowAnonymous]
         public IActionResult Index(string? q, int page = 1, int pageSize = 12)
         {
             if (page < 1) page = 1;

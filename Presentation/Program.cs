@@ -4,8 +4,10 @@ using DataAccess.Services;
 using Domain.Interfaces;
 using Domain.Models;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Mvc.Filters;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
+using Presentation.ActionFilter;
 using Presentation.Controllers;
 using Presentation.Data;
 using Presentation.Factory;
@@ -46,7 +48,7 @@ builder.Services.AddControllersWithViews();
 builder.Services.AddScoped(typeof(CategoriesRepository));
 builder.Services.AddScoped(typeof(OrdersRepository));
 builder.Services.AddScoped(typeof(JournalsRepository));
-
+builder.Services.AddScoped(typeof(QueryActionFilter));
 
 //we need to switch between NoPromotion vs BlackFridayPromotion depening on a property in appsettings.json
 
