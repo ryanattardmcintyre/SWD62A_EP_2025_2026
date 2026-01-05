@@ -41,11 +41,13 @@ namespace Presentation.Controllers
         private BooksRepository _booksRepository;
         private OrdersRepository _ordersRepository;
         private IPromotion _promotion;
+        private ILogger<BooksController> _logger;
         public BooksController([FromKeyedServices("db")] IBooksRepository booksRepository, OrdersRepository ordersRepository,
-            IPromotion promotion) {
+            IPromotion promotion, ILogger<BooksController> logger) {
              _booksRepository = (BooksRepository) booksRepository;
             _ordersRepository = ordersRepository;
             _promotion = promotion;
+            _logger = logger;
         }
 
         [HttpGet] //Loads the page (with empty input controls)
@@ -61,22 +63,51 @@ namespace Presentation.Controllers
         public IActionResult Create(BooksCreateViewModel b, [FromServices]IWebHostEnvironment host, [FromServices] CategoriesRepository categoriesRepository)
         {
             //TempData survives a redirection
+            string filename = "";
             try
             {
+                _logger.LogInformation("Create method started");
+
                 //cleaning the data related to the uploaded file
                 //i.e. a) to give a filename to the file b) where to store the file?
-                string filename = Guid.NewGuid().ToString() + System.IO.Path.GetExtension(b.UploadedFile.FileName);
-
-                //absolute path //C:\Users\attar\source\repos\SWD62A_EP_2025_2026\Presentation\wwwroot\images
-                string absolutePath = host.WebRootPath + @"\images\" + filename;
-
-                using (var myStream = new System.IO.FileStream(absolutePath, FileMode.CreateNew))
+                if (b.UploadedFile != null)
                 {
-                    b.UploadedFile.CopyTo(myStream);
-                }
 
-                b.Book.Path = "\\images\\" + filename; //relative path
-                _booksRepository.Add(b.Book);
+                    filename = Guid.NewGuid().ToString() + System.IO.Path.GetExtension(b.UploadedFile.FileName);
+
+                    _logger.LogInformation("Filename generated: " + filename);
+
+                    //absolute path //C:\Users\attar\source\repos\SWD62A_EP_2025_2026\Presentation\wwwroot\images
+                    string absolutePath = host.WebRootPath + @"\images\" + filename;
+
+                    _logger.LogWarning("Saving the uploaded file ");
+                    if (b.UploadedFile != null)
+                    {
+                        _logger.LogInformation("File name uploaded: " + b.UploadedFile.FileName +
+                            "| File type " + b.UploadedFile.ContentType +
+                            "| File size: " + b.UploadedFile.Length);
+                    }
+                    else
+                    {
+                        _logger.LogCritical("No file has been uploaded");
+                    }
+
+                    using (var myStream = new System.IO.FileStream(absolutePath, FileMode.CreateNew))
+                    {
+                        b.UploadedFile.CopyTo(myStream);
+                    }
+                    _logger.LogInformation($"Created {filename} from the uploaded file: {b.UploadedFile.FileName}");
+
+                    b.Book.Path = "\\images\\" + filename; //relative path
+                }
+                else
+                {
+                    b.Book.Path = "";
+                }
+                    _booksRepository.Add(b.Book);
+
+                _logger.LogInformation($"{b.Book.Title} saved to database");
+
                 TempData["success"] = "Book added successfully";
                 ModelState.Clear();
 
@@ -84,6 +115,17 @@ namespace Presentation.Controllers
             }
             catch (Exception ex)
             {
+                _logger.LogError($"Book with guid {filename} uploaded on {DateTime.Now.ToString("dd/MM/yyyy HH:mm:ss")} " +
+                    $"generated this error: " +
+                    ex.Message);
+
+                if(ex.InnerException != null)
+                {
+                    _logger.LogError($"Book with guid {filename} uploaded on {DateTime.Now.ToString("dd/MM/yyyy HH:mm:ss")} " +
+                  $"generated this inner exception error: " +
+                  ex.InnerException.Message);
+                }
+
                 TempData["failure"] = "Book failed to be added. Try again later";
                 //return RedirectToAction("Create");
                 //retrieve the categories list and pass it to the page

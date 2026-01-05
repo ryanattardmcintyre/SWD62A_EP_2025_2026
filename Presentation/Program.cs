@@ -11,6 +11,7 @@ using Presentation.ActionFilter;
 using Presentation.Controllers;
 using Presentation.Data;
 using Presentation.Factory;
+using Serilog;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -66,6 +67,23 @@ builder.Services.AddKeyedScoped<IBooksRepository, BooksFileRepository>("file",
 
 //var booksRepository =builder.Services.BuildServiceProvider().CreateScope().ServiceProvider.GetRequiredService<BooksRepository>();
 
+/*
+ * 0 - 
+ * 
+ * 
+ */ 
+
+
+
+var log = new LoggerConfiguration().WriteTo.File(
+               "logs/log.txt",
+               rollingInterval: RollingInterval.Day,
+               restrictedToMinimumLevel: Serilog.Events.LogEventLevel.Warning)
+               .CreateLogger();
+
+
+// builder.Host.UseSerilog(log);
+builder.Logging.AddSerilog(log);
 
 
 var app = builder.Build();
