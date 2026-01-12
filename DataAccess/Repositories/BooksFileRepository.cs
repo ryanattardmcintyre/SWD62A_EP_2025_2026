@@ -18,6 +18,8 @@ namespace DataAccess.Repositories
             filePath = path;
         }
 
+        
+
         public void ResetBackupSource()
         {
             if(System.IO.File.Exists(filePath))
@@ -43,6 +45,16 @@ namespace DataAccess.Repositories
 
             return allBooks.AsQueryable();
 
+        }
+
+        public void Update(Book book)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Book Get(int id)
+        {
+            throw new NotImplementedException();
         }
     }
 }

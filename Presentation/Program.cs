@@ -48,6 +48,16 @@ builder.Services.AddControllersWithViews();
 //builder.Services.AddScoped(typeof(BooksRepository));
 builder.Services.AddScoped(typeof(CategoriesRepository));
 builder.Services.AddScoped(typeof(OrdersRepository));
+
+builder.Services.AddScoped<OrdersRepository>();
+builder.Services.AddScoped<IOrdersRepository>(x => { //change you don't register OrdersLoggingRepository
+    var logger = x.GetRequiredService<ILogger<OrdersLoggingRepository>>();
+    var repo = x.GetRequiredService<OrdersRepository>();
+
+    return new OrdersLoggingRepository(logger, repo);
+});
+
+
 builder.Services.AddScoped(typeof(JournalsRepository));
 builder.Services.AddScoped(typeof(QueryActionFilter));
 

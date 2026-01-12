@@ -39,10 +39,11 @@ namespace Presentation.Controllers
     public class BooksController : Controller
     {
         private BooksRepository _booksRepository;
-        private OrdersRepository _ordersRepository;
+        private IOrdersRepository _ordersRepository;
         private IPromotion _promotion;
         private ILogger<BooksController> _logger;
-        public BooksController([FromKeyedServices("db")] IBooksRepository booksRepository, OrdersRepository ordersRepository,
+        public BooksController([FromKeyedServices("db")] IBooksRepository booksRepository,
+            IOrdersRepository ordersRepository,
             IPromotion promotion, ILogger<BooksController> logger) {
              _booksRepository = (BooksRepository) booksRepository;
             _ordersRepository = ordersRepository;

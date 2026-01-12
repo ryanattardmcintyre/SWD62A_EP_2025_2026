@@ -1,4 +1,5 @@
 ﻿using DataAccess.Context;
+using Domain.Interfaces;
 using Domain.Models;
 using System;
 using System.Collections.Generic;
@@ -8,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace DataAccess.Repositories
 {
-    public class OrdersRepository
+    public class OrdersRepository: IOrdersRepository
     {
         public ShoppingCartDbContext _context { get; set; }
         public OrdersRepository(ShoppingCartDbContext context)
@@ -29,7 +30,7 @@ namespace DataAccess.Repositories
         }
 
         //Entry point to the above two methods
-        public void Checkout (string username, List<OrderItem> booksBeingBought, BooksRepository booksRepo)
+        public void Checkout (string username, List<OrderItem> booksBeingBought, IBooksRepository booksRepo)
         {
             Order o = new Order();
             o.Id = Guid.NewGuid(); //43168B8A-E0BC-4BDC-9670-783EC47D51AF
